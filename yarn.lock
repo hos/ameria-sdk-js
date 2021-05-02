@@ -135,7 +135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^15.0.1":
   version: 15.0.1
   resolution: "@types/node@npm:15.0.1"
   checksum: 4e4fb69394efb224272ad7c6b6dc16a381b97e46a8f3c21d33fec51ef13a4d635f571b446d127eae333ea6a763f304b787f4b3f73e24e1f3b05a21b481900dfb
@@ -334,6 +334,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ameria-sdk-js@workspace:."
   dependencies:
+    "@types/node": ^15.0.1
     "@types/node-fetch": ^2.5.10
     "@typescript-eslint/eslint-plugin": ^4.22.0
     "@typescript-eslint/parser": ^4.22.0
