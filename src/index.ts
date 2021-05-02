@@ -1,1 +1,1 @@
-export { AmeriaClient } from "./class";
+export { Client } from "./class";
