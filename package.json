@@ -8,6 +8,9 @@
   "scripts": {
     "build": "yarn tsc -b"
   },
+  "files": [
+    "dist/**"
+  ],
   "devDependencies": {
     "@types/node": "^15.0.1",
     "@types/node-fetch": "^2.5.10",
