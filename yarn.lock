@@ -5,6 +5,24 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"@ameria/vpos-sdk@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@ameria/vpos-sdk@workspace:."
+  dependencies:
+    "@types/node": ^15.0.1
+    "@types/node-fetch": ^2.5.10
+    "@typescript-eslint/eslint-plugin": ^4.22.0
+    "@typescript-eslint/parser": ^4.22.0
+    eslint: ^7.25.0
+    eslint-config-prettier: ^8.3.0
+    eslint-plugin-prettier: ^3.4.0
+    node-fetch: ^2.6.1
+    nodemon: ^2.0.7
+    prettier: ^2.2.1
+    typescript: ^4.2.4
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
   resolution: "@babel/code-frame@npm:7.12.11"
@@ -329,24 +347,6 @@ __metadata:
   checksum: 949f891686134c49c9c98c401d29ccd9e0cbd5d2c76163edd21c3c6bea694a4f7e5108fdc0c55b4cc90de85c93a9356fc30b3a7fab222721db3e38c585c61053
   languageName: node
   linkType: hard
-
-"ameria-sdk-js@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "ameria-sdk-js@workspace:."
-  dependencies:
-    "@types/node": ^15.0.1
-    "@types/node-fetch": ^2.5.10
-    "@typescript-eslint/eslint-plugin": ^4.22.0
-    "@typescript-eslint/parser": ^4.22.0
-    eslint: ^7.25.0
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-prettier: ^3.4.0
-    node-fetch: ^2.6.1
-    nodemon: ^2.0.7
-    prettier: ^2.2.1
-    typescript: ^4.2.4
-  languageName: unknown
-  linkType: soft
 
 "ansi-align@npm:^3.0.0":
   version: 3.0.0
