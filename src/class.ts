@@ -61,7 +61,9 @@ export class Client extends AmeriaClient {
     const body: IGetPaymentIdBody = {
       OrderID: orderId,
     };
+
     const data = await this.ameriaFetch("GetPaymentId", body);
+
     return data;
   }
 
@@ -69,7 +71,9 @@ export class Client extends AmeriaClient {
     const body: IPaymentDetailsBody = {
       PaymentID: paymentId,
     };
+
     const data = await this.ameriaFetch("GetPaymentDetails", body);
+
     return data;
   }
 
@@ -78,7 +82,9 @@ export class Client extends AmeriaClient {
       StartDate: params.startDate.toISOString(),
       EndDate: params.startDate.toISOString(),
     };
+
     const data = await this.ameriaFetch("GetPendingTransactions", body);
+
     return data;
   }
 
@@ -90,7 +96,9 @@ export class Client extends AmeriaClient {
       PaymentID: paymentId,
       Amount: amount,
     };
+
     const data = await this.ameriaFetch("RefundPayment", body);
+
     return data;
   }
 
@@ -98,7 +106,9 @@ export class Client extends AmeriaClient {
     const body: ICancelPaymentBody = {
       PaymentID: paymentId,
     };
+
     const data = await this.ameriaFetch("CancelPayment", body);
+
     return data;
   }
 
@@ -128,6 +138,7 @@ export class Client extends AmeriaClient {
     };
 
     const data = await this.ameriaFetch("ActivateBinding", body);
+
     return data;
   }
 
@@ -144,6 +155,7 @@ export class Client extends AmeriaClient {
     };
 
     const data = await this.ameriaFetch("DeactivateBinding", body);
+
     return data;
   }
 
@@ -171,6 +183,7 @@ export class Client extends AmeriaClient {
     };
 
     const data = await this.ameriaFetch("MakeBindingPayment", body);
+
     return data;
   }
 }
