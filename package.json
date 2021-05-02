@@ -6,6 +6,7 @@
   "author": "hos <hovosanoyan@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "prepack": "yarn build",
     "build": "yarn tsc -b"
   },
   "files": [
