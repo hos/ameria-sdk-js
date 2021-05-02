@@ -1,2 +1,2 @@
 # ameria-sdk-js
-The VPOS SDK for Ameria Bank
+The non official VPOS SDK for Ameria Bank
