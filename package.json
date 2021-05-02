@@ -1,0 +1,22 @@
+{
+  "name": "ameria-sdk-js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:hos/ameria-sdk-js",
+  "author": "hos <hovosanoyan@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.10",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
