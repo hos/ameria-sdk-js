@@ -1,6 +1,6 @@
 {
   "name": "ameria-sdk-js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "repository": "git@github.com:hos/ameria-sdk-js",
   "author": "hos <hovosanoyan@gmail.com>",
