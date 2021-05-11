@@ -179,7 +179,7 @@ export interface IInitPaymentParams {
   amount: number;
   desc: string;
   opaque: string;
-  currency: IInitPaymentBody["Currency"];
+  currency?: IInitPaymentBody["Currency"];
   backUrl: string;
   lang?: "en" | "hy" | "ru";
   userId?: string;
@@ -197,6 +197,6 @@ export interface IMakeBindingPaymentParams {
   backURL: string;
   paymentType: keyof typeof PaymentTypes;
   description: string;
-  currency: string;
+  currency: IMakeBindingPaymentBody["Currency"];
   opaque: string;
 }
