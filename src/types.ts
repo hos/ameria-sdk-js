@@ -203,7 +203,7 @@ export interface IMakeBindingPaymentBody {
   Password?: string;
   CardHolderID: string;
   Amount: number;
-  OrderID: number | string;
+  OrderID: number;
   BackURL: string;
   PaymentType: TPaymentEnum;
   Description: string;

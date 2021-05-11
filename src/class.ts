@@ -162,7 +162,7 @@ export class Client extends AmeriaClient {
   async makeBindingPayment(params: {
     cardHolderID: string;
     amount: number;
-    orderID: number | string;
+    orderID: number;
     backURL: string;
     paymentType: keyof typeof PaymentTypes;
     description: string;
