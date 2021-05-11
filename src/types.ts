@@ -1,4 +1,4 @@
-import responseCodes from "./responseCodes";
+import responseCodes from "./response-codes";
 
 export type AmeriaFns =
   | "InitPayment"

@@ -17,7 +17,7 @@ import {
 } from "./types";
 import { ok } from "assert";
 import { AmeriaClientParams, AmeriaClient } from "./client";
-import PaymentTypes from "./paymentTypes";
+import PaymentTypes from "./payment-types";
 
 export class Client extends AmeriaClient {
   constructor(params: AmeriaClientParams) {
