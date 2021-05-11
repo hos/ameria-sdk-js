@@ -24,15 +24,9 @@ export class Client extends AmeriaClient {
     super(params);
   }
 
-  async initPayment(params: {
-    orderId: number | string;
-    amount: number;
-    desc: string;
-    opaque: string;
-    backUrl: string;
-    lang?: "en" | "hy" | "ru";
-    userId?: string;
-  }): Promise<IInitPaymentResponse & { url: string | null }> {
+  async initPayment(
+    params: IInitPaymentParams
+  ): Promise<IInitPaymentResponse & { url: string | null }> {
     const body: IInitPaymentBody = {
       OrderID: params.orderId,
       Amount: params.amount,
@@ -77,7 +71,7 @@ export class Client extends AmeriaClient {
     return data;
   }
 
-  async getPendingTransactions(params: { startDate: Date; endDate: Date }) {
+  async getPendingTransactions(params: IGetPendingTransactionsParams) {
     const body: IGetPendingTransactionsBody = {
       StartDate: params.startDate.toISOString(),
       EndDate: params.startDate.toISOString(),
@@ -159,16 +153,7 @@ export class Client extends AmeriaClient {
     return data;
   }
 
-  async makeBindingPayment(params: {
-    cardHolderID: string;
-    amount: number;
-    orderID: number;
-    backURL: string;
-    paymentType: keyof typeof PaymentTypes;
-    description: string;
-    currency: string;
-    opaque: string;
-  }) {
+  async makeBindingPayment(params: IMakeBindingPaymentParams) {
     const num = PaymentTypes[params.paymentType];
     ok(num);
     const body: IMakeBindingPaymentBody = {
@@ -186,4 +171,30 @@ export class Client extends AmeriaClient {
 
     return data;
   }
+}
+
+export interface IInitPaymentParams {
+  orderId: number | string;
+  amount: number;
+  desc: string;
+  opaque: string;
+  backUrl: string;
+  lang?: "en" | "hy" | "ru";
+  userId?: string;
+}
+
+export interface IGetPendingTransactionsParams {
+  startDate: Date;
+  endDate: Date;
+}
+
+export interface IMakeBindingPaymentParams {
+  cardHolderID: string;
+  amount: number;
+  orderID: number;
+  backURL: string;
+  paymentType: keyof typeof PaymentTypes;
+  description: string;
+  currency: string;
+  opaque: string;
 }
