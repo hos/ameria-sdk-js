@@ -32,7 +32,7 @@ export class Client extends AmeriaClient {
       Amount: params.amount,
       Description: params.desc,
       BackURL: params.backUrl,
-      CardHolderID: params.userId,
+      CardHolderID: params.cardHolderId,
       Currency: params.currency,
       Opaque: params.opaque,
     };
@@ -182,7 +182,7 @@ export interface IInitPaymentParams {
   currency?: IInitPaymentBody["Currency"];
   backUrl: string;
   lang?: "en" | "hy" | "ru";
-  userId?: string;
+  cardHolderId?: string;
 }
 
 export interface IGetPendingTransactionsParams {
