@@ -1,4 +1,9 @@
-export default {
+interface IResponseCode {
+  description: string;
+  message: string;
+}
+
+const RESPONSE_CODES: Record<string, IResponseCode> = {
   "0-1": {
     description: "Processing center response timeout",
     message: "sv_unavailable",
@@ -314,3 +319,5 @@ export default {
     message: "Unknown error",
   },
 };
+
+export default RESPONSE_CODES;
