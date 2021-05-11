@@ -1,4 +1,4 @@
-import responseCodes from "./response-codes";
+import { RESPONSE_CODES } from "./response-codes";
 
 export type AmeriaFns =
   | "InitPayment"
@@ -38,7 +38,7 @@ export interface IPaymentDetailsResponse {
     | 5 // MainRest (arca)
     | 7 // PayPal
     | 6; // Binding
-  ResponseCode: keyof typeof responseCodes;
+  ResponseCode: keyof typeof RESPONSE_CODES;
   rrn: string;
   TerminalId: string;
   TrxnDescription: string;
