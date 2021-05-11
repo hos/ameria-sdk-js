@@ -33,6 +33,7 @@ export class Client extends AmeriaClient {
       Description: params.desc,
       BackURL: params.backUrl,
       CardHolderID: params.userId,
+      Currency: params.currency,
       Opaque: params.opaque,
     };
 
@@ -178,6 +179,7 @@ export interface IInitPaymentParams {
   amount: number;
   desc: string;
   opaque: string;
+  currency: IInitPaymentBody["Currency"];
   backUrl: string;
   lang?: "en" | "hy" | "ru";
   userId?: string;
