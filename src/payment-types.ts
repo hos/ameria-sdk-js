@@ -1,6 +1,17 @@
 import { TPaymentEnum } from "./types";
 
-const PaymentTypes: { [key: string]: TPaymentEnum } = {
+export type PaymentType =
+  | "None"
+  | "Arca"
+  | "MasterCard"
+  | "Visa"
+  | "Reward"
+  | "MainRest"
+  | "BindingMainRest"
+  | "PayPal"
+  | "PayX";
+
+const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
   None: 0,
   Arca: 1,
   MasterCard: 2,
