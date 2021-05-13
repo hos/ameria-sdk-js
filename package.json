@@ -1,6 +1,6 @@
 {
   "name": "@ameria/vpos-sdk",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "dist/index.js",
   "repository": "git@github.com:hos/ameria-sdk-js",
   "author": "hos <hovosanoyan@gmail.com>",
