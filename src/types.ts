@@ -122,7 +122,7 @@ export interface IRefundPaymentBody {
   Amount: number;
 }
 
-export interface IRefundPaymentResponses {
+export interface IRefundPaymentResponse {
   ResponseCode: string;
   ResponseMessage: string;
   Opaque: string;

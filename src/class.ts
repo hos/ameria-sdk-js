@@ -5,7 +5,7 @@ import {
   IPaymentDetailsBody,
   IPaymentDetailsResponse,
   IGetPendingTransactionsBody,
-  IRefundPaymentResponses,
+  IRefundPaymentResponse,
   IRefundPaymentBody,
   ICancelPaymentResponse,
   ICancelPaymentBody,
@@ -86,7 +86,7 @@ export class Client extends AmeriaClient {
   async refundPayment(
     paymentId: string,
     amount: number
-  ): Promise<IRefundPaymentResponses> {
+  ): Promise<IRefundPaymentResponse> {
     const body: IRefundPaymentBody = {
       PaymentID: paymentId,
       Amount: amount,
