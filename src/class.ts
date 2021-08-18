@@ -14,6 +14,7 @@ import {
   IActivateBindingBody,
   IDeactivateBindingBody,
   IMakeBindingPaymentBody,
+  IConfirmPaymentBody,
 } from "./types";
 import { ok } from "assert";
 import { AmeriaClientParams, AmeriaClient } from "./client";
@@ -58,6 +59,20 @@ export class Client extends AmeriaClient {
     };
 
     const data = await this.ameriaFetch("GetPaymentId", body);
+
+    return data;
+  }
+
+  async confirmPayment(
+    paymentId: string,
+    amount: number
+  ): Promise<IPaymentDetailsResponse> {
+    const body: IConfirmPaymentBody = {
+      PaymentID: paymentId,
+      Amount: amount,
+    };
+
+    const data = await this.ameriaFetch("ConfirmPayment", body);
 
     return data;
   }
