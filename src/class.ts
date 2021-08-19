@@ -15,6 +15,7 @@ import {
   IDeactivateBindingBody,
   IMakeBindingPaymentBody,
   IConfirmPaymentBody,
+  IConfirmPaymentResponse,
 } from "./types";
 import { ok } from "assert";
 import { AmeriaClientParams, AmeriaClient } from "./client";
@@ -66,7 +67,7 @@ export class Client extends AmeriaClient {
   async confirmPayment(
     paymentId: string,
     amount: number
-  ): Promise<IPaymentDetailsResponse> {
+  ): Promise<IConfirmPaymentResponse> {
     const body: IConfirmPaymentBody = {
       PaymentID: paymentId,
       Amount: amount,
