@@ -46,9 +46,10 @@ export class Client extends AmeriaClient {
 
     const { PaymentID, ResponseCode } = data;
 
+    const langSuffix = params.lang ? `&amp;lang=${params.lang}` : ''
     const url =
       ResponseCode === 1
-        ? `${this.host}/Payments/Pay?id=${PaymentID}&amp;lang=${params.lang}`
+        ? `${this.host}/Payments/Pay?id=${PaymentID}${langSuffix}`
         : null;
 
     return { ...data, url };
