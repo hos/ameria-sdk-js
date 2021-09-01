@@ -16,6 +16,7 @@ import {
   IMakeBindingPaymentBody,
   IConfirmPaymentBody,
   IConfirmPaymentResponse,
+  IMakeBindingPaymentResponse,
 } from "./types";
 import { ok } from "assert";
 import { AmeriaClientParams, AmeriaClient } from "./client";
@@ -24,6 +25,11 @@ import PaymentTypes from "./payment-types";
 export class Client extends AmeriaClient {
   constructor(params: AmeriaClientParams) {
     super(params);
+  }
+
+  getUrl(paymentID: string, lang?: string) {
+    const langStr = lang ? `&amp;lang=${lang}` : "";
+    return `${this.host}/Payments/Pay?id=${paymentID}${langStr}`;
   }
 
   async initPayment(
@@ -46,11 +52,7 @@ export class Client extends AmeriaClient {
 
     const { PaymentID, ResponseCode } = data;
 
-    const langSuffix = params.lang ? `&amp;lang=${params.lang}` : ''
-    const url =
-      ResponseCode === 1
-        ? `${this.host}/Payments/Pay?id=${PaymentID}${langSuffix}`
-        : null;
+    const url = ResponseCode === 1 ? this.getUrl(PaymentID, params.lang) : null;
 
     return { ...data, url };
   }
@@ -185,7 +187,10 @@ export class Client extends AmeriaClient {
       Opaque: params.opaque,
     };
 
-    const data = await this.ameriaFetch("MakeBindingPayment", body);
+    const data: IMakeBindingPaymentResponse = await this.ameriaFetch(
+      "MakeBindingPayment",
+      body
+    );
 
     return data;
   }
