@@ -30,10 +30,10 @@ export class Client extends AmeriaClient {
     params: IInitPaymentParams
   ): Promise<IInitPaymentResponse & { url: string | null }> {
     const body: IInitPaymentBody = {
-      OrderID: params.orderId,
+      OrderID: params.orderID,
       Amount: params.amount,
-      Description: params.desc,
-      BackURL: params.backUrl,
+      Description: params.description,
+      BackURL: params.backURL,
       CardHolderID: params.cardHolderId,
       Currency: params.currency,
       Opaque: params.opaque,
@@ -192,14 +192,14 @@ export class Client extends AmeriaClient {
 }
 
 export interface IInitPaymentParams {
-  orderId: number | string;
   amount: number;
-  desc: string;
-  opaque: string;
-  currency?: IInitPaymentBody["Currency"];
-  backUrl: string;
-  lang?: "en" | "hy" | "ru";
+  backURL: string;
   cardHolderId?: string;
+  currency?: IInitPaymentBody["Currency"];
+  description: string;
+  lang?: "en" | "hy" | "ru";
+  opaque: string;
+  orderID: number | string;
 }
 
 export interface IGetPendingTransactionsParams {
@@ -208,12 +208,12 @@ export interface IGetPendingTransactionsParams {
 }
 
 export interface IMakeBindingPaymentParams {
-  cardHolderID: string;
   amount: number;
-  orderID: number;
   backURL: string;
-  paymentType: keyof typeof PaymentTypes;
-  description: string;
+  cardHolderID: string;
   currency: IMakeBindingPaymentBody["Currency"];
+  description: string;
   opaque: string;
+  orderID: number;
+  paymentType: keyof typeof PaymentTypes;
 }
