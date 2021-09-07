@@ -174,7 +174,7 @@ export class Client extends AmeriaClient {
   }
 
   async makeBindingPayment(params: IMakeBindingPaymentParams) {
-    const num = PaymentTypes[params.paymentType];
+    const num = PaymentTypes[params.paymentType || 'BindingMainRest'];
     ok(num);
     const body: IMakeBindingPaymentBody = {
       CardHolderID: params.cardHolderID,
