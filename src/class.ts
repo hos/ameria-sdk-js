@@ -22,6 +22,11 @@ import {
   IConfirmPaymentBody,
   IConfirmPaymentResponse,
   IMakeBindingPaymentResponse,
+  ISSNCheckBody,
+  ISSNCheckResponse,
+  TCurrency,
+  TCurrencyCode,
+  TSSNIdentifierType,
 } from "./types";
 import { AmeriaClientParams, AmeriaClient } from "./client";
 import PaymentTypes from "./payment-types";
@@ -31,6 +36,24 @@ function paymentTypeCode(name: keyof typeof PaymentTypes): TPaymentEnum {
   if (code === undefined) {
     throw new TypeError(`Unknown payment type "${String(name)}"`);
   }
+  return code;
+}
+
+const CURRENCY_CODES: Record<TCurrency, TCurrencyCode> = {
+  AMD: "051",
+  EUR: "978",
+  USD: "840",
+  RUB: "643",
+  "051": "051",
+  "978": "978",
+  "840": "840",
+  "643": "643",
+};
+
+function currencyCode(currency?: TCurrency): TCurrencyCode | undefined {
+  if (currency === undefined) return undefined;
+  const code = CURRENCY_CODES[currency];
+  if (!code) throw new TypeError(`Unsupported currency "${currency}"`);
   return code;
 }
 
@@ -48,7 +71,8 @@ export class Client extends AmeriaClient {
   getUrl(paymentID: string, lang?: IInitPaymentParams["lang"]) {
     const url = new URL(`${this.host}/Payments/Pay`);
     url.searchParams.set("id", paymentID);
-    if (lang) url.searchParams.set("lang", lang);
+    // The bank's code for Armenian is "am"; "hy" is accepted for compatibility.
+    if (lang) url.searchParams.set("lang", lang === "hy" ? "am" : lang);
     return url.toString();
   }
 
@@ -62,8 +86,10 @@ export class Client extends AmeriaClient {
       Description: params.description,
       BackURL: params.backURL,
       CardHolderID: params.cardHolderId,
-      Currency: params.currency,
+      Currency: currencyCode(params.currency),
       Opaque: params.opaque,
+      Timeout: params.timeout,
+      PaymentServiceType: params.paymentServiceType,
     };
 
     const data: IInitPaymentResponse = await this.ameriaFetch(
@@ -191,21 +217,42 @@ export class Client extends AmeriaClient {
       BackURL: params.backURL,
       PaymentType: num,
       Description: params.description,
-      Currency: params.currency,
+      Currency: currencyCode(params.currency),
       Opaque: params.opaque,
     };
 
     return this.ameriaFetch("MakeBindingPayment", body);
   }
+
+  /**
+   * Submit the payer's national identifier for a payment (SSNCheck).
+   * The identifier is personal data: do not log it.
+   */
+  async ssnCheck(
+    paymentId: string,
+    ssn: string,
+    identifierType: TSSNIdentifierType,
+  ): Promise<ISSNCheckResponse> {
+    const body: ISSNCheckBody = {
+      PaymentID: paymentId,
+      SSN: ssn,
+      IdentifierType: identifierType,
+    };
+    return this.ameriaFetch("SSNCheck", body);
+  }
 }
 
 export interface IInitPaymentParams {
+  /** Seconds the payment page stays valid. */
+  timeout?: number;
+  paymentServiceType?: number;
   amount: number;
   backURL: string;
   cardHolderId?: string;
-  currency?: IInitPaymentBody["Currency"];
+  currency?: TCurrency;
   description: string;
-  lang?: "en" | "hy" | "ru";
+  /** "hy" is sent as "am", the bank's code for Armenian. */
+  lang?: "en" | "am" | "hy" | "ru";
   opaque: string;
   orderID: number | string;
 }
@@ -219,7 +266,7 @@ export interface IMakeBindingPaymentParams {
   amount: number;
   backURL: string;
   cardHolderID: string;
-  currency: IMakeBindingPaymentBody["Currency"];
+  currency?: TCurrency;
   description: string;
   opaque: string;
   orderID: number;

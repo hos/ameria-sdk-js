@@ -1,4 +1,4 @@
-interface IResponseCode {
+export interface IResponseCode {
   description: string;
   message: string;
 }

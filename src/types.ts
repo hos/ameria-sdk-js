@@ -11,7 +11,14 @@ export type AmeriaFns =
   | "GetBindings"
   | "ActivateBinding"
   | "DeactivateBinding"
-  | "MakeBindingPayment";
+  | "MakeBindingPayment"
+  | "SSNCheck";
+
+/** ISO 4217 numeric codes, the format the bank documents and echoes back. */
+export type TCurrencyCode = "051" | "978" | "840" | "643";
+/** Alphabetic codes accepted by this SDK and converted to numeric codes. */
+export type TCurrencyAlpha = "AMD" | "EUR" | "USD" | "RUB";
+export type TCurrency = TCurrencyCode | TCurrencyAlpha;
 
 export interface IPaymentDetailsBody {
   PaymentID: string;
@@ -32,18 +39,15 @@ export interface IPaymentDetailsResponse {
   Description: string;
   MerchantId: string;
   Opaque: string;
-  OrderID: number;
+  OrderID: string;
   PaymentState: string;
-  PaymentType:
-    | 5 // MainRest (arca)
-    | 7 // PayPal
-    | 6; // Binding
+  PaymentType: TPaymentEnum;
   ResponseCode: keyof typeof RESPONSE_CODES;
   rrn: string;
   TerminalId: string;
   TrxnDescription: string;
-  OrderStatus: number;
-  RefundedAmount: string;
+  OrderStatus: string;
+  RefundedAmount: number;
   CardHolderID: string;
   MDOrderID: string;
   PrimaryRC: string;
@@ -51,7 +55,12 @@ export interface IPaymentDetailsResponse {
   ProcessingIP: string;
   BindingID: string;
   ActionCode: string;
-  ExchangeRate: string;
+  ExchangeRate: number;
+  BankInfo?: {
+    BankName: string;
+    BankCountryCode: string;
+    BankCountryName: string;
+  } | null;
 }
 
 export interface IInitPaymentResponse {
@@ -64,13 +73,16 @@ export interface IInitPaymentBody {
   ClientID?: string;
   Username?: string;
   Password?: string;
-  Currency?: "AMD" | "EUR" | "USD" | "RUB";
+  Currency?: TCurrencyCode;
   Description: string;
   OrderID: number | string;
   Amount: number;
   BackURL?: string;
   Opaque?: string;
   CardHolderID?: number | string;
+  /** Seconds the payment page stays valid. */
+  Timeout?: number;
+  PaymentServiceType?: number;
 }
 
 export interface IGetPaymentIdBody {
@@ -94,7 +106,7 @@ export interface IGetPendingTransactionsBody {
 }
 
 export type TGetPendingTransactionsResponse = {
-  OrderId: string | number;
+  OrderId: number;
   ClientName: string;
   CardNumber: string;
   Amount: number;
@@ -149,7 +161,11 @@ export type TPaymentEnum =
   | 5 //MainRest
   | 6 //BindingMainRest
   | 7 //PayPal
-  | 11; //PayX
+  | 11 //PayX
+  | 12 //MirCard
+  | 13 //ApplePay
+  | 14 //EPGCardApplePay
+  | 17; //Amex
 
 export interface IGetBindingsBody {
   ClientID?: string;
@@ -207,7 +223,7 @@ export interface IMakeBindingPaymentBody {
   BackURL: string;
   PaymentType: TPaymentEnum;
   Description: string;
-  Currency: string;
+  Currency?: TCurrencyCode;
   Opaque: string;
 }
 
@@ -240,4 +256,26 @@ export interface IMakeBindingPaymentResponse {
   TrxnDescription: string;
   rrn: string;
   ActionCode: string;
+  /** Set when the issuer asks for 3-D Secure; redirect the payer to AcsUrl. */
+  AcsUrl?: string | null;
+  PaReq?: string | null;
+  TermUrl?: string | null;
+}
+
+export type TSSNIdentifierType =
+  | 1 // SSN
+  | 2 // CertificateOfAbsenceOfSSN
+  | 3 // ARMPassport
+  | 4 // IdCard
+  | 5; // InternationalPassport
+
+export interface ISSNCheckBody {
+  PaymentID: string;
+  SSN: string;
+  IdentifierType: TSSNIdentifierType;
+}
+
+export interface ISSNCheckResponse {
+  Status: string;
+  Message: string;
 }

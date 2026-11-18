@@ -165,3 +165,48 @@ test("times out a hanging request", async () => {
   const c = new Client({ ...creds, timeoutMs: 20 });
   await assert.rejects(c.getPaymentDetails("p"), { name: "TimeoutError" });
 });
+
+test("currency alpha codes are sent as ISO numeric codes", async () => {
+  mockFetch({ PaymentID: "p", ResponseCode: 1 });
+  const c = new Client(creds);
+  const base = {
+    orderID: 1,
+    amount: 10,
+    description: "d",
+    backURL: "https://x",
+    opaque: "",
+  };
+  await c.initPayment({ ...base, currency: "AMD" });
+  await c.initPayment({ ...base, currency: "840" });
+  await c.initPayment(base);
+  assert.equal(calls[0].body.Currency, "051");
+  assert.equal(calls[1].body.Currency, "840");
+  assert.equal("Currency" in calls[2].body, false);
+  await assert.rejects(c.initPayment({ ...base, currency: "GBP" }), TypeError);
+});
+
+test("Armenian is sent as lang=am", () => {
+  const c = new Client(creds);
+  assert.match(c.getUrl("p", "hy"), /lang=am$/);
+  assert.match(c.getUrl("p", "am"), /lang=am$/);
+});
+
+test("initPayment forwards Timeout; new payment types and SSNCheck", async () => {
+  mockFetch({ PaymentID: "p", ResponseCode: 1, Status: "OK", Message: "" });
+  const c = new Client(creds);
+  await c.initPayment({
+    orderID: 1,
+    amount: 10,
+    description: "d",
+    backURL: "https://x",
+    opaque: "",
+    timeout: 600,
+  });
+  assert.equal(calls[0].body.Timeout, 600);
+  await c.getBindings("Amex");
+  assert.equal(calls[1].body.PaymentType, 17);
+  await c.ssnCheck("p", "1234567890", 1);
+  assert.match(calls[2].url, /\/api\/VPOS\/SSNCheck$/);
+  assert.equal(calls[2].body.SSN, "1234567890");
+  assert.equal(calls[2].body.IdentifierType, 1);
+});

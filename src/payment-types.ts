@@ -9,7 +9,11 @@ export type PaymentType =
   | "MainRest"
   | "BindingMainRest"
   | "PayPal"
-  | "PayX";
+  | "PayX"
+  | "MirCard"
+  | "ApplePay"
+  | "EPGCardApplePay"
+  | "Amex";
 
 const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
   None: 0,
@@ -21,6 +25,10 @@ const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
   BindingMainRest: 6,
   PayPal: 7,
   PayX: 11,
+  MirCard: 12,
+  ApplePay: 13,
+  EPGCardApplePay: 14,
+  Amex: 17,
 };
 
 export default PaymentTypes;
