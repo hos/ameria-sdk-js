@@ -1,0 +1,11 @@
+/* Accent derived from a warm orange; Starlight builds the rest of the palette. */
+:root {
+  --sl-color-accent-low: #3a1a0d;
+  --sl-color-accent: #d65a22;
+  --sl-color-accent-high: #f7c7ae;
+}
+:root[data-theme="light"] {
+  --sl-color-accent-low: #fbe0d2;
+  --sl-color-accent: #b84a17;
+  --sl-color-accent-high: #4a1f0b;
+}

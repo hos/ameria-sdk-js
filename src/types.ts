@@ -1,4 +1,4 @@
-import { RESPONSE_CODES } from "./response-codes";
+import type { RESPONSE_CODES } from "./response-codes.js";
 
 export type AmeriaFns =
   | "InitPayment"

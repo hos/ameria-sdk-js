@@ -1,0 +1,50 @@
+---
+title: Accept a payment
+description: The full one-step payment flow, from registering the payment to verifying it.
+---
+
+import { Code } from "@astrojs/starlight/components";
+import createPayment from "../../../../../examples/create-payment.ts?raw";
+import verifyPayment from "../../../../../examples/verify-payment.ts?raw";
+
+A vPOS payment has three steps: you register it, the payer pays on the bank's page,
+and you verify the result.
+
+## 1. Register the payment
+
+<Code code={createPayment} lang="ts" title="create-payment.ts" />
+
+`ResponseCode` is `1` when the bank accepted the request; only then is `url` set.
+Store the returned `PaymentID` with your order.
+
+| Option         | Notes                                                                             |
+| -------------- | --------------------------------------------------------------------------------- |
+| `orderID`      | Unique per payment. In the test environment it must be in your assigned range.    |
+| `amount`       | In the payment currency.                                                          |
+| `currency`     | `"AMD"` (default), `"USD"`, `"EUR"`, `"RUB"` or the ISO numeric code.             |
+| `backURL`      | Where the payer returns to.                                                       |
+| `opaque`       | Free text you get back with the payment details.                                  |
+| `lang`         | Payment page language: `"en"`, `"am"` (or `"hy"`), `"ru"`.                        |
+| `timeout`      | Seconds the payment page stays valid.                                             |
+| `cardHolderId` | Saves the card for later — see [Saved cards](/ameria-sdk-js/guides/saved-cards/). |
+
+## 2. Redirect the payer
+
+Send the payer to `url`. The bank's page collects the card details and runs 3-D Secure.
+
+## 3. Verify the result
+
+The payer returns to your `backURL` with `orderID`, `paymentID`, `opaque` and a
+response code in the query string. **That redirect is not signed** — anyone can open your
+`backURL` with a success code. Always ask the bank:
+
+<Code code={verifyPayment} lang="ts" title="verify-payment.ts" />
+
+A payment is complete when `getPaymentDetails` returns `ResponseCode === "00"` and the
+amount and order match what you expected.
+
+:::tip
+The payer may close the tab before returning. Check payments that never came back with
+[`getPaymentDetails`](/ameria-sdk-js/api/classes/client/#getpaymentdetails) or list them with
+[`getPendingTransactions`](/ameria-sdk-js/api/classes/client/#getpendingtransactions).
+:::

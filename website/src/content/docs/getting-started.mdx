@@ -1,0 +1,47 @@
+---
+title: Getting started
+description: Install the SDK, create a client and take your first payment.
+---
+
+import { Code, Steps } from "@astrojs/starlight/components";
+import client from "../../../../examples/client.ts?raw";
+import createPayment from "../../../../examples/create-payment.ts?raw";
+
+## Requirements
+
+- Node.js **22.12** or later. The package is ESM; CommonJS code on Node 22.12+ can load it with `require()`.
+- A vPOS merchant account with Ameriabank. The bank issues a **client ID**, a **username** and a **password** for the test environment first, and separate ones for production.
+
+## Install
+
+```sh
+npm install @ameria/vpos-sdk
+```
+
+## Create a client
+
+Keep the credentials out of your code — environment variables or a secret store.
+
+<Code code={client} lang="ts" title="client.ts" />
+
+`isTest: true` sends requests to `servicestest.ameriabank.am`; leave it out for production.
+Requests time out after 30 seconds; pass `timeoutMs` to change that.
+
+## Take a payment
+
+<Steps>
+
+1. **Register the payment.** [`initPayment`](/ameria-sdk-js/api/classes/client/#initpayment) returns a `url` to the bank's card page.
+
+   <Code code={createPayment} lang="ts" title="create-payment.ts" />
+
+2. **Redirect the payer** to that `url`. They enter their card details on the bank's page — card data never touches your server.
+
+3. **Verify on return.** The bank sends the payer back to your `backURL`. That redirect is not signed, so ask the bank for the result before fulfilling the order — see [Accept a payment](/ameria-sdk-js/guides/accept-a-payment/).
+
+</Steps>
+
+## Next
+
+- [Test environment](/ameria-sdk-js/testing/) — what the bank's sandbox accepts.
+- [Security](/ameria-sdk-js/security/) — what to check before going live.

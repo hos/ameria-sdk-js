@@ -1,0 +1,36 @@
+---
+title: Saved cards
+description: Charge a returning customer's card without them entering it again.
+---
+
+import { Code } from "@astrojs/starlight/components";
+import savedCards from "../../../../../examples/saved-cards.ts?raw";
+
+Saved cards — "binding transactions" in the bank's terms — let you charge a card again
+without the payer entering it: subscriptions, recurring payments, one-click checkout.
+
+## Turning it on
+
+An authorised person at your company, usually the director, applies through Ameriabank's
+mobile or internet banking. The feature works once the bank approves it.
+
+## Saving and charging a card
+
+<Code code={savedCards} lang="ts" title="saved-cards.ts" />
+
+1. Pass your own customer ID as `cardHolderId` to `initPayment`. When that payment
+   succeeds, the bank saves the card under that ID.
+2. Charge it later with `makeBindingPayment` and the same ID. `paymentType` defaults to
+   `"BindingMainRest"`.
+
+## 3-D Secure on saved cards
+
+The card issuer can still ask the payer to confirm a charge. Then the response has
+`AcsUrl` (with `PaReq` and `TermUrl`) set and the payment is **not** complete until the
+payer passes the check. Handle this case, or the charge silently never happens.
+
+## Managing saved cards
+
+`getBindings`, `deactivateBinding` and `activateBinding` list, disable and re-enable
+saved cards. The bank only accepts `"MainRest"` and `"BindingMainRest"` as payment types
+for these calls.

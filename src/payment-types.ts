@@ -1,4 +1,4 @@
-import { TPaymentEnum } from "./types";
+import type { TPaymentEnum } from "./types.js";
 
 export type PaymentType =
   | "None"

@@ -1,4 +1,4 @@
-import {
+import type {
   IGetPaymentIdBody,
   IGetPaymentIdResponse,
   IInitPaymentResponse,
@@ -27,9 +27,9 @@ import {
   TCurrency,
   TCurrencyCode,
   TSSNIdentifierType,
-} from "./types";
-import { AmeriaClientParams, AmeriaClient } from "./client";
-import PaymentTypes from "./payment-types";
+} from "./types.js";
+import { AmeriaClient, type AmeriaClientParams } from "./client.js";
+import PaymentTypes from "./payment-types.js";
 
 function paymentTypeCode(name: keyof typeof PaymentTypes): TPaymentEnum {
   const code = PaymentTypes[name];
@@ -63,11 +63,30 @@ function assertAmount(amount: number): void {
   }
 }
 
+/**
+ * Client for the Ameriabank vPOS REST API.
+ *
+ * @example
+ * ```ts
+ * import { Client } from "@ameria/vpos-sdk";
+ *
+ * const ameria = new Client({
+ *   clientId: process.env.AMERIA_CLIENT_ID!,
+ *   username: process.env.AMERIA_USERNAME!,
+ *   password: process.env.AMERIA_PASSWORD!,
+ *   isTest: true,
+ * });
+ * ```
+ */
 export class Client extends AmeriaClient {
   constructor(params: AmeriaClientParams) {
     super(params);
   }
 
+  /**
+   * Build the bank's payment page URL for a payment ID.
+   * {@link Client.initPayment} already returns it as `url`.
+   */
   getUrl(paymentID: string, lang?: IInitPaymentParams["lang"]) {
     const url = new URL(`${this.host}/Payments/Pay`);
     url.searchParams.set("id", paymentID);
@@ -76,6 +95,16 @@ export class Client extends AmeriaClient {
     return url.toString();
   }
 
+  /**
+   * Register a payment and get the URL of the bank's card page.
+   *
+   * Redirect the payer to `url`. After paying they come back to `backURL`;
+   * that redirect is not signed, so confirm the result with
+   * {@link Client.getPaymentDetails} before fulfilling the order.
+   *
+   * @returns The bank's response plus `url`, which is `null` unless
+   * `ResponseCode` is `1`.
+   */
   async initPayment(
     params: IInitPaymentParams,
   ): Promise<IInitPaymentResponse & { url: string | null }> {
@@ -104,6 +133,7 @@ export class Client extends AmeriaClient {
     return { ...data, url };
   }
 
+  /** Look up the bank's payment ID for one of your order IDs. */
   async getPaymentId(orderId: string | number): Promise<IGetPaymentIdResponse> {
     const body: IGetPaymentIdBody = {
       OrderID: orderId,
@@ -112,6 +142,10 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("GetPaymentId", body);
   }
 
+  /**
+   * Deposit a payment that was only approved (two-step payments).
+   * @param amount Amount to deposit; up to the approved amount.
+   */
   async confirmPayment(
     paymentId: string,
     amount: number,
@@ -125,6 +159,10 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("ConfirmPayment", body);
   }
 
+  /**
+   * Get the status and details of a payment. This is the only reliable way
+   * to know whether a payment succeeded: check `ResponseCode === "00"`.
+   */
   async getPaymentDetails(paymentId: string): Promise<IPaymentDetailsResponse> {
     const body: IPaymentDetailsBody = {
       PaymentID: paymentId,
@@ -133,6 +171,7 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("GetPaymentDetails", body);
   }
 
+  /** List transactions that were started but not completed in a date range. */
   async getPendingTransactions(
     params: IGetPendingTransactionsParams,
   ): Promise<TGetPendingTransactionsResponse> {
@@ -144,6 +183,10 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("GetPendingTransactions", body);
   }
 
+  /**
+   * Refund a completed payment, fully or partly.
+   * @param amount Amount to refund; up to the deposited amount.
+   */
   async refundPayment(
     paymentId: string,
     amount: number,
@@ -157,6 +200,10 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("RefundPayment", body);
   }
 
+  /**
+   * Cancel (reverse) a payment. For two-step payments this releases an
+   * approved amount that was never confirmed.
+   */
   async cancelPayment(paymentId: string): Promise<ICancelPaymentResponse> {
     const body: ICancelPaymentBody = {
       PaymentID: paymentId,
@@ -165,6 +212,7 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("CancelPayment", body);
   }
 
+  /** List the saved cards (bindings) of your merchant account. */
   async getBindings(
     paymentType: keyof typeof PaymentTypes,
   ): Promise<IGetCardBindingsResponse> {
@@ -177,6 +225,7 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("GetBindings", body);
   }
 
+  /** Re-enable a saved card that was deactivated. */
   async activateBinding(
     cardHolderId: string,
     paymentType: keyof typeof PaymentTypes,
@@ -191,6 +240,7 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("ActivateBinding", body);
   }
 
+  /** Disable a saved card so it can no longer be charged. */
   async deactivateBinding(
     cardHolderId: string,
     paymentType: keyof typeof PaymentTypes,
@@ -205,6 +255,12 @@ export class Client extends AmeriaClient {
     return this.ameriaFetch("DeactivateBinding", body);
   }
 
+  /**
+   * Charge a saved card without the payer entering card details.
+   *
+   * If the response has `AcsUrl` set, the card issuer requires 3-D Secure
+   * and the payment is not complete until the payer passes it.
+   */
   async makeBindingPayment(
     params: IMakeBindingPaymentParams,
   ): Promise<IMakeBindingPaymentResponse> {
@@ -242,29 +298,41 @@ export class Client extends AmeriaClient {
   }
 }
 
+/** Parameters of {@link Client.initPayment}. */
 export interface IInitPaymentParams {
+  /** Your order ID. In the test environment it must be in the range the bank gave you. */
+  orderID: number | string;
+  /** Amount in the payment currency. The test environment only accepts 10 AMD. */
+  amount: number;
+  /** Defaults to AMD. Alphabetic codes are converted to ISO numeric codes. */
+  currency?: TCurrency;
+  /** Shown to the payer on the payment page. */
+  description: string;
+  /** Where the bank sends the payer after the payment page. */
+  backURL: string;
+  /** Free text returned to you with the payment. */
+  opaque: string;
+  /** Set to save the card for later {@link Client.makeBindingPayment} charges. */
+  cardHolderId?: string;
+  /** Payment page language. "hy" is sent as "am", the bank's code for Armenian. */
+  lang?: "en" | "am" | "hy" | "ru";
   /** Seconds the payment page stays valid. */
   timeout?: number;
+  /** Passed to the bank as-is; the bank does not document its values. */
   paymentServiceType?: number;
-  amount: number;
-  backURL: string;
-  cardHolderId?: string;
-  currency?: TCurrency;
-  description: string;
-  /** "hy" is sent as "am", the bank's code for Armenian. */
-  lang?: "en" | "am" | "hy" | "ru";
-  opaque: string;
-  orderID: number | string;
 }
 
+/** Parameters of {@link Client.getPendingTransactions}. */
 export interface IGetPendingTransactionsParams {
   startDate: Date;
   endDate: Date;
 }
 
+/** Parameters of {@link Client.makeBindingPayment}. */
 export interface IMakeBindingPaymentParams {
   amount: number;
   backURL: string;
+  /** The `cardHolderId` you passed to {@link Client.initPayment} when the card was saved. */
   cardHolderID: string;
   currency?: TCurrency;
   description: string;

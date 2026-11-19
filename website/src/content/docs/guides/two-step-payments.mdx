@@ -1,0 +1,27 @@
+---
+title: Two-step payments
+description: Approve a payment first and deposit it later.
+---
+
+import { Code } from "@astrojs/starlight/components";
+import twoStep from "../../../../../examples/two-step.ts?raw";
+
+With two-step payments, `initPayment` only **approves** the amount — it is held on the
+payer's card but not charged. You then deposit it with `confirmPayment` or release it with
+`cancelPayment`. This suits orders you can only fulfil after checking stock.
+
+<Code code={twoStep} lang="ts" title="two-step.ts" />
+
+You can confirm less than the approved amount.
+
+## Turning it on
+
+Two-step is a setting on your API client, not a request option:
+
+- **Test:** ask Ameriabank's technical support to switch your test client to two-step.
+- **Production:** send an application through Ameriabank's mobile or internet banking.
+
+:::caution
+Once the bank switches a client to two-step, **every** payment on it is two-step. To offer
+both kinds, ask the bank for a second client and create one `Client` for each.
+:::
