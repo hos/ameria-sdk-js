@@ -1,0 +1,69 @@
+---
+title: Accept Ameriabank card payments in Node.js
+description: Unofficial TypeScript SDK for accepting card payments with Ameriabank vPOS.
+template: splash
+hero:
+  title: Ameria vPOS SDK
+  tagline: Accept card payments in Armenia with Ameriabank vPOS — typed, tested, zero dependencies.
+  actions:
+    - text: Get started
+      link: /ameria-sdk-js/getting-started/
+      icon: right-arrow
+    - text: API reference
+      link: /ameria-sdk-js/api/classes/ameriaclient/
+      variant: minimal
+---
+
+import {
+  Card,
+  CardGrid,
+  Code,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+import quickStart from "../../../../examples/quick-start.ts?raw";
+
+<Tabs syncKey="pkg">
+  <TabItem label="npm">
+
+```sh
+npm install @ameria/vpos-sdk
+```
+
+</TabItem>
+  <TabItem label="pnpm">
+
+```sh
+pnpm add @ameria/vpos-sdk
+```
+
+</TabItem>
+  <TabItem label="yarn">
+
+```sh
+yarn add @ameria/vpos-sdk
+```
+
+</TabItem>
+</Tabs>
+
+<Code code={quickStart} lang="ts" title="checkout.ts" />
+
+<CardGrid>
+  <Card title="Every vPOS endpoint" icon="list-format">
+    Payments, two-step confirm and cancel, refunds, saved cards, pending
+    transactions and the national ID check — all eleven-plus REST calls.
+  </Card>
+  <Card title="Typed end to end" icon="seti:typescript">
+    Request and response types follow the bank's live API reference, including
+    the 2025–26 additions: Apple Pay, Amex, 3-D Secure fields and bank info.
+  </Card>
+  <Card title="Safe defaults" icon="approve-check">
+    Credentials never show up in logs, requests time out, redirects are refused
+    and amounts are validated before anything reaches the bank.
+  </Card>
+  <Card title="Modern runtime" icon="rocket">
+    ESM, Node.js 22.12+, built-in `fetch`, no runtime dependencies. CommonJS
+    code can still `require()` it.
+  </Card>
+</CardGrid>

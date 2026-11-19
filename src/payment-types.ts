@@ -1,4 +1,4 @@
-import { TPaymentEnum } from "./types";
+import type { PaymentTypeCode } from "./types.js";
 
 export type PaymentType =
   | "None"
@@ -9,9 +9,13 @@ export type PaymentType =
   | "MainRest"
   | "BindingMainRest"
   | "PayPal"
-  | "PayX";
+  | "PayX"
+  | "MirCard"
+  | "ApplePay"
+  | "EPGCardApplePay"
+  | "Amex";
 
-const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
+const PaymentTypes: Record<PaymentType, PaymentTypeCode> = {
   None: 0,
   Arca: 1,
   MasterCard: 2,
@@ -21,6 +25,10 @@ const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
   BindingMainRest: 6,
   PayPal: 7,
   PayX: 11,
+  MirCard: 12,
+  ApplePay: 13,
+  EPGCardApplePay: 14,
+  Amex: 17,
 };
 
 export default PaymentTypes;

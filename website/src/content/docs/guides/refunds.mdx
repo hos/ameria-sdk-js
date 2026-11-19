@@ -1,0 +1,17 @@
+---
+title: Refunds and cancellations
+description: Return money to the payer, fully or partly.
+---
+
+import { Code } from "@astrojs/starlight/components";
+import refund from "../../../../../examples/refund.ts?raw";
+
+<Code code={refund} lang="ts" title="refund.ts" />
+
+- **`refundPayment(paymentId, amount)`** returns money from a completed payment. The amount
+  can be less than the original for a partial refund.
+- **`cancelPayment(paymentId)`** reverses a payment. For two-step payments it releases an
+  approval that was never confirmed.
+
+Your client needs the bank's permission for each: response code `513` means no refund
+permission, `514` no reversal permission.

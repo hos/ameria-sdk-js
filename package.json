@@ -1,32 +1,62 @@
 {
   "name": "@ameria/vpos-sdk",
-  "version": "0.0.15",
-  "main": "dist/index.js",
-  "repository": "git@github.com:hos/ameria-sdk-js",
-  "author": "hos <hovosanoyan@gmail.com>",
+  "version": "0.1.0",
+  "description": "Unofficial Node.js SDK for the Ameriabank vPOS payment API",
+  "keywords": [
+    "ameriabank",
+    "ameria",
+    "vpos",
+    "armenia",
+    "payments",
+    "payment-gateway",
+    "acquiring",
+    "typescript"
+  ],
+  "homepage": "https://hos.github.io/ameria-sdk-js/",
+  "bugs": "https://github.com/hos/ameria-sdk-js/issues",
+  "repository": "github:hos/ameria-sdk-js",
   "license": "MIT",
+  "author": "hos <hovosanoyan@gmail.com>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "prepack": "yarn build",
-    "build": "yarn tsc -b",
-    "docs": "yarn typedoc src/index.ts"
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "yarn build && tsc --noEmit",
+    "lint": "eslint . && prettier --check . && publint && attw --pack . --profile esm-only",
+    "format": "prettier --write .",
+    "test": "yarn build && node --test test/*.test.*",
+    "docs:dev": "yarn workspace website dev",
+    "docs:build": "yarn workspace website build"
   },
-  "files": [
-    "dist/**"
+  "workspaces": [
+    "website"
   ],
   "devDependencies": {
-    "@types/node": "^16.6.1",
-    "@types/node-fetch": "^2.5.12",
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
-    "@typescript-eslint/parser": "^4.29.2",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "nodemon": "^2.0.12",
-    "prettier": "^2.3.2",
-    "typedoc": "^0.21.5",
-    "typescript": "^4.3.5"
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@eslint/js": "^10.0.0",
+    "@types/node": "^22.20.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.14.0",
+    "prettier": "^3.6.0",
+    "publint": "^0.3.25",
+    "typedoc": "^0.28.20",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0"
   },
-  "dependencies": {
-    "node-fetch": "^2.6.1"
-  }
+  "packageManager": "yarn@4.18.1"
 }

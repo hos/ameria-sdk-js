@@ -1,0 +1,40 @@
+---
+title: Security
+description: What the SDK protects, and what is still your job.
+---
+
+## Verify every payment with the bank
+
+The redirect back to your `backUrl` carries no signature. A payer — or anyone — can open it
+with a success code and an order ID of their choice. Treat it only as a hint that the payer
+is back, then call `verifyPayment` with the amount, currency and order you expect before
+you ship anything. See
+[Accept a payment](/ameria-sdk-js/guides/accept-a-payment/#3-verify-the-result).
+
+## Credentials
+
+- Load the client ID, username and password from environment variables or a secret store,
+  never from source code.
+- The client keeps them in private class fields: `console.log(client)`,
+  `JSON.stringify(client)` and error reporters do not see them.
+- The bank sends them inside every request body over HTTPS. Don't log request bodies from a
+  proxy or HTTP interceptor in front of the SDK.
+- Test and production credentials are different; keep them in separate configs.
+
+## What the SDK does for you
+
+- Talks only to `https://services.ameriabank.am` or `https://servicestest.ameriabank.am`
+  over HTTPS, with Node's default certificate checks.
+- Refuses HTTP redirects, so a misrouted request can't carry credentials elsewhere.
+- Times out after 30 seconds instead of hanging.
+- Rejects zero, negative and non-numeric amounts before sending them.
+- Logs nothing.
+- Has no runtime dependencies.
+
+## Card and personal data
+
+Card numbers are entered on the bank's page, never on yours. The SDK only sees the masked
+number the bank returns (`CardNumber`), which is safe to store.
+
+`ssnCheck` sends a national ID number. Don't log it, and keep it only as long as you
+must.

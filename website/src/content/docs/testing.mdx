@@ -1,0 +1,23 @@
+---
+title: Test environment
+description: How Ameriabank's vPOS sandbox differs from production.
+---
+
+Create the client with `isTest: true` to use `https://servicestest.ameriabank.am/VPOS`.
+
+The bank sends test credentials, test cards and the details below by email when you
+apply for vPOS. They are not published, and they differ between merchants.
+
+- **Order IDs must come from your assigned range.** Each merchant gets a block of
+  order IDs (for example `2350301`–`2350400`). An ID outside it, or one used before,
+  is refused.
+- **Only 10 AMD is accepted.** Other amounts fail in the sandbox
+  (response code `560`).
+- **Two-step payments and saved cards** must be switched on for your test client by
+  the bank's support team before `confirmPayment` or `makeBindingPayment` work.
+
+:::caution
+These rules come from other integrators' reports of the bank's emailed guide (vPOS 3.1),
+not from a public document. If the sandbox behaves differently for you, trust the
+bank's email.
+:::

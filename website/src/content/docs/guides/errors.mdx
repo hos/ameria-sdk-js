@@ -1,0 +1,27 @@
+---
+title: Errors
+description: The two kinds of failure and how to handle each.
+---
+
+import { Code } from "@astrojs/starlight/components";
+import errors from "../../../../../examples/errors.ts?raw";
+
+A call can fail in two ways.
+
+- **The bank declines.** The request worked, but `ResponseCode` says no. The call resolves
+  normally; check the code. `initPayment` succeeds with `1`, every other call with `"00"`.
+  The [response codes](/ameria-sdk-js/response-codes/) page lists what each code means, and
+  `RESPONSE_CODES` gives you the same table in code.
+- **The request fails.** The SDK throws:
+  - [`AmeriaHttpError`](/ameria-sdk-js/api/classes/ameriahttperror/) when the bank answers with
+    an HTTP error or a page that is not JSON (maintenance, a proxy error). It carries
+    `endpoint`, `status` and the first 500 characters of `body`.
+  - An error named `TimeoutError` when the bank does not answer within `timeoutMs`.
+  - `TypeError` or `RangeError` for invalid input, before any request is sent.
+
+<Code code={errors} lang="ts" title="errors.ts" />
+
+:::caution
+After a timeout the payment may or may not have gone through. Check it with
+`getPaymentDetails` before retrying, or you may charge twice.
+:::

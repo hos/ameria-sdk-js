@@ -1,0 +1,32 @@
+---
+title: Response codes
+description: What each Ameriabank vPOS response code means.
+tableOfContents: false
+---
+
+import { RESPONSE_CODES } from "../../../../src/response-codes.ts";
+
+`initPayment` returns `1` for success and `2` for failure. Every other call returns a string
+code, where `"00"` means success. This table is the `RESPONSE_CODES` object exported by the
+SDK, so it is always the same as the one in your code.
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Meaning</th>
+      <th>Bank message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(RESPONSE_CODES).map(([code, { description, message }]) => (
+      <tr>
+        <td>
+          <code>{code}</code>
+        </td>
+        <td>{description || "—"}</td>
+        <td>{message}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

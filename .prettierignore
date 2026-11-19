@@ -1,0 +1,6 @@
+dist/
+.yarn/
+yarn.lock
+website/dist/
+website/.astro/
+website/src/content/docs/api/
