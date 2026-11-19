@@ -26,6 +26,28 @@ jobs:
       - run: yarn typecheck
       - run: yarn test
 
+  runtimes:
+    name: test (${{ matrix.runtime }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [bun, deno]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        if: matrix.runtime == 'bun'
+      - uses: denoland/setup-deno@v2
+        if: matrix.runtime == 'deno'
+        with:
+          deno-version: v2.x
+      - run: npm install -g corepack && corepack enable
+      - run: yarn install --immutable
+      - run: yarn test:${{ matrix.runtime }}
+
   docs:
     runs-on: ubuntu-latest
     steps:

@@ -5,7 +5,8 @@
 First release since 2021. Breaking — see the
 [upgrade guide](https://hos.github.io/ameria-sdk-js/migration/).
 
-- ESM-only; requires Node.js 22.12+ (`require()` still works there).
+- ESM-only; requires Node.js 22.12+ (`require()` still works there). Also tested on Bun
+  and Deno.
 - `Client` renamed to `AmeriaClient` (`Client` kept as a deprecated alias).
 - Options are camelCase: `orderId`, `backUrl`, `cardHolderId`. Type names lost their
   `I`/`T` prefixes.

@@ -7,7 +7,8 @@ Unofficial TypeScript SDK for the Ameriabank vPOS payment API, published as
 
 Yarn 4 via Corepack (`corepack enable`).
 
-- `yarn test` — build, then run `node:test` against `dist/`.
+- `yarn test` — build, then run `node:test` against `dist/`. CI also runs the same tests
+  on Bun (`yarn test:bun`) and Deno (`yarn test:deno`); keep them runtime-neutral.
 - `yarn typecheck` — also type-checks `examples/`.
 - `yarn lint` — ESLint, Prettier, publint, attw. Run `yarn format` to fix formatting.
 - `yarn docs:dev` / `yarn docs:build` — the Starlight site in `website/`.

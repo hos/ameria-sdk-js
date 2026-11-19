@@ -50,8 +50,8 @@ if (paid) {
 
 ## Requirements
 
-- Node.js 22.12 or newer. The package is ESM-only; `require("@ameria/vpos-sdk")`
-  also works on these versions.
+- Node.js 22.12 or newer, current Bun or Deno 2+. The package is ESM-only;
+  `require("@ameria/vpos-sdk")` also works on these versions.
 - No runtime dependencies — it uses the built-in `fetch`.
 
 ## Development

@@ -39,6 +39,8 @@
     "lint": "eslint . && prettier --check . && publint && attw --pack . --profile esm-only",
     "format": "prettier --write .",
     "test": "yarn build && node --test test/*.test.*",
+    "test:bun": "yarn build && bun test ./test/",
+    "test:deno": "yarn build && deno test --no-check test/",
     "docs:dev": "yarn workspace website dev",
     "docs:build": "yarn workspace website build"
   },
