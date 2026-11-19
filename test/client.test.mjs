@@ -158,10 +158,15 @@ test("constructor requires credentials", () => {
 });
 
 test("times out a hanging request", async () => {
+  // A real request keeps the event loop alive; AbortSignal.timeout does not.
   globalThis.fetch = (url, { signal }) =>
-    new Promise((_, reject) =>
-      signal.addEventListener("abort", () => reject(signal.reason)),
-    );
+    new Promise((_, reject) => {
+      const keepAlive = setTimeout(() => {}, 5_000);
+      signal.addEventListener("abort", () => {
+        clearTimeout(keepAlive);
+        reject(signal.reason);
+      });
+    });
   const c = new Client({ ...creds, timeoutMs: 20 });
   await assert.rejects(c.getPaymentDetails("p"), { name: "TimeoutError" });
 });
