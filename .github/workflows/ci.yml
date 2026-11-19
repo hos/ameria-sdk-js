@@ -19,7 +19,8 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
-      - run: corepack enable || npm install -g corepack && corepack enable
+          package-manager-cache: false
+      - run: npm install -g corepack && corepack enable
       - run: yarn install --immutable
       - run: yarn lint
       - run: yarn typecheck
@@ -32,6 +33,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-      - run: corepack enable || npm install -g corepack && corepack enable
+          package-manager-cache: false
+      - run: npm install -g corepack && corepack enable
       - run: yarn install --immutable
       - run: yarn docs:build
