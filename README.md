@@ -1,7 +1,12 @@
 # Ameria vPOS SDK
 
-Unofficial TypeScript SDK for the [Ameriabank vPOS](https://ameriabank.am) payment API.
-Accept card payments, refunds, two-step payments and saved cards from Node.js.
+TypeScript SDK for the [Ameriabank vPOS](https://ameriabank.am) payment API.
+Accept card payments, refunds, two-step payments and saved cards from Node.js, Bun or Deno.
+
+> [!NOTE]
+> **Unofficial.** This is a community project, not made, reviewed or supported by
+> Ameriabank. For your merchant account, credentials and the vPOS service itself,
+> contact the bank.
 
 **Docs:** https://hos.github.io/ameria-sdk-js/ · for AI tools:
 [llms.txt](https://hos.github.io/ameria-sdk-js/llms.txt)
