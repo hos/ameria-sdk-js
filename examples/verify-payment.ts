@@ -1,16 +1,22 @@
 import { ameria } from "./client.js";
 
 /**
- * Handle the payer coming back to your BackURL.
+ * Handle the payer coming back to your backUrl.
  * The query string is not signed: never trust it, ask the bank instead.
  */
-export async function handleBackUrl(url: URL, expectedAmount: number) {
-  const paymentID = url.searchParams.get("paymentID");
-  if (!paymentID) return { paid: false };
+export async function handleBackUrl(
+  url: URL,
+  order: { id: number; total: number },
+) {
+  const paymentId = url.searchParams.get("paymentID");
+  if (!paymentId) return false;
 
-  const details = await ameria.getPaymentDetails(paymentID);
-  const paid =
-    details.ResponseCode === "00" && details.Amount === expectedAmount;
+  const { paid, reason } = await ameria.verifyPayment(paymentId, {
+    amount: order.total,
+    currency: "AMD",
+    orderId: order.id,
+  });
 
-  return { paid, orderID: details.OrderID, card: details.CardNumber };
+  if (!paid) console.warn(`Order ${order.id} not paid: ${reason}`);
+  return paid;
 }

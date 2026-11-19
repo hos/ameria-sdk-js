@@ -1,6 +1,6 @@
-import { Client } from "@ameria/vpos-sdk";
+import { AmeriaClient } from "@ameria/vpos-sdk";
 
-export const ameria = new Client({
+export const ameria = new AmeriaClient({
   clientId: process.env.AMERIA_CLIENT_ID!,
   username: process.env.AMERIA_USERNAME!,
   password: process.env.AMERIA_PASSWORD!,

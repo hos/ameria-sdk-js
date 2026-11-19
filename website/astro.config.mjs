@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
+import starlightLlmsTxt from "starlight-llms-txt";
 import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
 export default defineConfig({
@@ -29,6 +30,13 @@ export default defineConfig({
       customCss: ["./src/styles/theme.css"],
       expressiveCode: { defaultProps: { wrap: true } },
       plugins: [
+        starlightLlmsTxt({
+          projectName: "Ameria vPOS SDK",
+          description:
+            "Unofficial TypeScript SDK for the Ameriabank vPOS payment API (Armenia). ESM-only, Node.js 22.12+, no runtime dependencies.",
+          details:
+            "Always confirm a payment with `verifyPayment` before fulfilling an order: the redirect to `backUrl` is not signed. The test environment only accepts 10 AMD and order IDs from the merchant's assigned range.",
+        }),
         starlightLinksValidator({ errorOnLocalLinks: true }),
         starlightTypeDoc({
           entryPoints: ["../src/index.ts"],

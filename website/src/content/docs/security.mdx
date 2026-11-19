@@ -5,10 +5,10 @@ description: What the SDK protects, and what is still your job.
 
 ## Verify every payment with the bank
 
-The redirect back to your `backURL` carries no signature. A payer — or anyone — can open it
+The redirect back to your `backUrl` carries no signature. A payer — or anyone — can open it
 with a success code and an order ID of their choice. Treat it only as a hint that the payer
-is back, then call `getPaymentDetails` and check `ResponseCode === "00"`, the amount, the
-currency and the order before you ship anything. See
+is back, then call `verifyPayment` with the amount, currency and order you expect before
+you ship anything. See
 [Accept a payment](/ameria-sdk-js/guides/accept-a-payment/#3-verify-the-result).
 
 ## Credentials

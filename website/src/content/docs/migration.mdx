@@ -15,6 +15,9 @@ and it changes a few things you may rely on.
 | `currency` is sent as the ISO numeric code (`"051"` for AMD).                                                                                          | Nothing — `"AMD"`, `"USD"`, `"EUR"` and `"RUB"` are still accepted and converted.               |
 | `lang: "hy"` is sent as `am`, the bank's code for Armenian.                                                                                            | Nothing; you can also pass `"am"`.                                                              |
 | Some `getPaymentDetails` field types were corrected: `OrderID` and `OrderStatus` are strings, `RefundedAmount` and `ExchangeRate` are numbers.         | Adjust comparisons if you relied on the old types.                                              |
+| `Client` is now **`AmeriaClient`**.                                                                                                                    | Rename the import. `Client` still works but is deprecated.                                      |
+| Option names are camelCase: **`orderId`**, **`backUrl`**, **`cardHolderId`** (were `orderID`, `backURL`, `cardHolderID`).                              | Rename them in `initPayment` and `makeBindingPayment` calls.                                    |
+| Type names lost their `I`/`T` prefixes: `IInitPaymentParams` → `InitPaymentParams`, `TCurrency` → `Currency`, `TPaymentEnum` → `PaymentTypeCode`.      | Rename type imports. Request body types are no longer exported.                                 |
 | Amounts must be positive finite numbers.                                                                                                               | Invalid amounts now throw `RangeError` before any request.                                      |
 
 ## Fixed
@@ -26,6 +29,8 @@ and it changes a few things you may rely on.
 
 ## Added
 
+[`verifyPayment`](/ameria-sdk-js/api/classes/ameriaclient/#verifypayment), which checks a
+payment's status, amount, currency and order in one call; a `fetch` option on the client;
 Payment types `MirCard`, `ApplePay`, `EPGCardApplePay` and `Amex`; `timeout` and
 `paymentServiceType` on `initPayment`; 3-D Secure fields on `makeBindingPayment`;
-`BankInfo` on payment details; [`ssnCheck`](/ameria-sdk-js/api/classes/client/#ssncheck).
+`BankInfo` on payment details; [`ssnCheck`](/ameria-sdk-js/api/classes/ameriaclient/#ssncheck).

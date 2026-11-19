@@ -1,9 +1,9 @@
-export interface IResponseCode {
+export interface ResponseCodeInfo {
   description: string;
   message: string;
 }
 
-export const RESPONSE_CODES: Record<string, IResponseCode> = {
+export const RESPONSE_CODES: Record<string, ResponseCodeInfo> = {
   "0-1": {
     description: "Processing center response timeout",
     message: "sv_unavailable",

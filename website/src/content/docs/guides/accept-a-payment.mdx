@@ -19,10 +19,10 @@ Store the returned `PaymentID` with your order.
 
 | Option         | Notes                                                                             |
 | -------------- | --------------------------------------------------------------------------------- |
-| `orderID`      | Unique per payment. In the test environment it must be in your assigned range.    |
+| `orderId`      | Unique per payment. In the test environment it must be in your assigned range.    |
 | `amount`       | In the payment currency.                                                          |
 | `currency`     | `"AMD"` (default), `"USD"`, `"EUR"`, `"RUB"` or the ISO numeric code.             |
-| `backURL`      | Where the payer returns to.                                                       |
+| `backUrl`      | Where the payer returns to.                                                       |
 | `opaque`       | Free text you get back with the payment details.                                  |
 | `lang`         | Payment page language: `"en"`, `"am"` (or `"hy"`), `"ru"`.                        |
 | `timeout`      | Seconds the payment page stays valid.                                             |
@@ -34,17 +34,25 @@ Send the payer to `url`. The bank's page collects the card details and runs 3-D 
 
 ## 3. Verify the result
 
-The payer returns to your `backURL` with `orderID`, `paymentID`, `opaque` and a
+The payer returns to your `backUrl` with `orderID`, `paymentID`, `opaque` and a
 response code in the query string. **That redirect is not signed** — anyone can open your
-`backURL` with a success code. Always ask the bank:
+`backUrl` with a success code. Always ask the bank:
 
 <Code code={verifyPayment} lang="ts" title="verify-payment.ts" />
 
-A payment is complete when `getPaymentDetails` returns `ResponseCode === "00"` and the
-amount and order match what you expected.
+[`verifyPayment`](/ameria-sdk-js/api/classes/ameriaclient/#verifypayment) returns
+`paid: true` only when all of these hold:
+
+- the bank approved the payment (`ResponseCode` is `"00"`);
+- the amount, currency and order ID match what you passed;
+- the money was deposited (for [two-step payments](/ameria-sdk-js/guides/two-step-payments/),
+  pass `twoStep: true` to accept an approved payment);
+- nothing has been refunded.
+
+Otherwise `reason` says which check failed, and `details` holds the bank's full answer.
 
 :::tip
 The payer may close the tab before returning. Check payments that never came back with
-[`getPaymentDetails`](/ameria-sdk-js/api/classes/client/#getpaymentdetails) or list them with
-[`getPendingTransactions`](/ameria-sdk-js/api/classes/client/#getpendingtransactions).
+[`getPaymentDetails`](/ameria-sdk-js/api/classes/ameriaclient/#getpaymentdetails) or list them with
+[`getPendingTransactions`](/ameria-sdk-js/api/classes/ameriaclient/#getpendingtransactions).
 :::

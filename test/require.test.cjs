@@ -4,7 +4,7 @@ const assert = require("node:assert/strict");
 
 test("package can be required from CommonJS", () => {
   const sdk = require("@ameria/vpos-sdk");
-  assert.equal(typeof sdk.Client, "function");
+  assert.equal(typeof sdk.AmeriaClient, "function");
   assert.equal(typeof sdk.AmeriaHttpError, "function");
   assert.equal(sdk.PaymentTypes.BindingMainRest, 6);
 });

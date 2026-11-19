@@ -1,6 +1,6 @@
 import type { RESPONSE_CODES } from "./response-codes.js";
 
-export type AmeriaFns =
+export type AmeriaEndpoint =
   | "InitPayment"
   | "GetPaymentId"
   | "GetPendingTransactions"
@@ -15,18 +15,12 @@ export type AmeriaFns =
   | "SSNCheck";
 
 /** ISO 4217 numeric codes, the format the bank documents and echoes back. */
-export type TCurrencyCode = "051" | "978" | "840" | "643";
+export type CurrencyCode = "051" | "978" | "840" | "643";
 /** Alphabetic codes accepted by this SDK and converted to numeric codes. */
-export type TCurrencyAlpha = "AMD" | "EUR" | "USD" | "RUB";
-export type TCurrency = TCurrencyCode | TCurrencyAlpha;
+export type CurrencyAlpha = "AMD" | "EUR" | "USD" | "RUB";
+export type Currency = CurrencyCode | CurrencyAlpha;
 
-export interface IPaymentDetailsBody {
-  PaymentID: string;
-  Username?: string;
-  Password?: string;
-}
-
-export interface IPaymentDetailsResponse {
+export interface PaymentDetailsResponse {
   Amount: number;
   ApprovedAmount: number;
   ApprovalCode: string;
@@ -41,7 +35,7 @@ export interface IPaymentDetailsResponse {
   Opaque: string;
   OrderID: string;
   PaymentState: string;
-  PaymentType: TPaymentEnum;
+  PaymentType: PaymentTypeCode;
   ResponseCode: keyof typeof RESPONSE_CODES;
   rrn: string;
   TerminalId: string;
@@ -63,49 +57,19 @@ export interface IPaymentDetailsResponse {
   } | null;
 }
 
-export interface IInitPaymentResponse {
+export interface InitPaymentResponse {
   PaymentID: string;
   ResponseCode: 1 | 2;
   ResponseMessage: string;
 }
 
-export interface IInitPaymentBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  Currency?: TCurrencyCode;
-  Description: string;
-  OrderID: number | string;
-  Amount: number;
-  BackURL?: string;
-  Opaque?: string;
-  CardHolderID?: number | string;
-  /** Seconds the payment page stays valid. */
-  Timeout?: number;
-  PaymentServiceType?: number;
-}
-
-export interface IGetPaymentIdBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  OrderID: number | string;
-}
-export interface IGetPaymentIdResponse {
+export interface GetPaymentIdResponse {
   PaymentId: string;
   ResponseMessage: string;
   ResponseCode: string;
 }
 
-export interface IGetPendingTransactionsBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  StartDate: string;
-  EndDate: string;
-}
-
-export type TGetPendingTransactionsResponse = {
+export type GetPendingTransactionsResponse = {
   OrderId: number;
   ClientName: string;
   CardNumber: string;
@@ -114,45 +78,25 @@ export type TGetPendingTransactionsResponse = {
   ErrorMessage: string;
 }[];
 
-export interface IConfirmPaymentBody {
-  PaymentID: string;
-  Username?: string;
-  Password?: string;
-  Amount: number;
-}
-
-export interface IConfirmPaymentResponse {
+export interface ConfirmPaymentResponse {
   ResponseCode: string;
   ResponseMessage: string;
   Opaque: string;
 }
 
-export interface IRefundPaymentBody {
-  Username?: string;
-  Password?: string;
-  PaymentID: string;
-  Amount: number;
-}
-
-export interface IRefundPaymentResponse {
+export interface RefundPaymentResponse {
   ResponseCode: string;
   ResponseMessage: string;
   Opaque: string;
 }
 
-export interface ICancelPaymentBody {
-  PaymentID: string;
-  Username?: string;
-  Password?: string;
-}
-
-export interface ICancelPaymentResponse {
+export interface CancelPaymentResponse {
   ResponseCode: string;
   ResponseMessage: string;
   Opaque: string;
 }
 
-export type TPaymentEnum =
+export type PaymentTypeCode =
   | 0 //None
   | 1 //Arca
   | 2 //MasterCard
@@ -167,14 +111,7 @@ export type TPaymentEnum =
   | 14 //EPGCardApplePay
   | 17; //Amex
 
-export interface IGetBindingsBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  PaymentType: TPaymentEnum;
-}
-
-export interface IGetCardBindingsResponse {
+export interface GetBindingsResponse {
   ResponseCode: string;
   ResponseMessage: string;
   CardBindingFileds: {
@@ -185,49 +122,19 @@ export interface IGetCardBindingsResponse {
   }[];
 }
 
-export interface IActivateBindingBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  CardHolderID: string;
-  PaymentType: number;
-}
-
-export interface IActivateBindingResponse {
+export interface ActivateBindingResponse {
   ResponseCode: string;
   ResponseMessage: string;
   CardHolderID: string;
 }
 
-export interface IDeactivateBindingBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  CardHolderID: string;
-  PaymentType: number;
-}
-
-export interface IDeactivateBindingResponse {
+export interface DeactivateBindingResponse {
   ResponseCode: string;
   ResponseMessage: string;
   CardHolderID: string;
 }
 
-export interface IMakeBindingPaymentBody {
-  ClientID?: string;
-  Username?: string;
-  Password?: string;
-  CardHolderID: string;
-  Amount: number;
-  OrderID: number;
-  BackURL: string;
-  PaymentType: TPaymentEnum;
-  Description: string;
-  Currency?: TCurrencyCode;
-  Opaque: string;
-}
-
-export interface IMakeBindingPaymentResponse {
+export interface MakeBindingPaymentResponse {
   PaymentID: string;
   ResponseCode: string;
   Amount: number;
@@ -244,7 +151,7 @@ export interface IMakeBindingPaymentResponse {
   TerminalId: string;
   OrderID: string;
   PaymentState: string;
-  PaymentType: TPaymentEnum;
+  PaymentType: PaymentTypeCode;
   PrimaryRC: string;
   ExpDate: string;
   ProcessingIP: string;
@@ -262,20 +169,14 @@ export interface IMakeBindingPaymentResponse {
   TermUrl?: string | null;
 }
 
-export type TSSNIdentifierType =
+export type SsnIdentifierType =
   | 1 // SSN
   | 2 // CertificateOfAbsenceOfSSN
   | 3 // ARMPassport
   | 4 // IdCard
   | 5; // InternationalPassport
 
-export interface ISSNCheckBody {
-  PaymentID: string;
-  SSN: string;
-  IdentifierType: TSSNIdentifierType;
-}
-
-export interface ISSNCheckResponse {
+export interface SsnCheckResponse {
   Status: string;
   Message: string;
 }

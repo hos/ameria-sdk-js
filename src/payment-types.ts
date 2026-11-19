@@ -1,4 +1,4 @@
-import type { TPaymentEnum } from "./types.js";
+import type { PaymentTypeCode } from "./types.js";
 
 export type PaymentType =
   | "None"
@@ -15,7 +15,7 @@ export type PaymentType =
   | "EPGCardApplePay"
   | "Amex";
 
-const PaymentTypes: Record<PaymentType, TPaymentEnum> = {
+const PaymentTypes: Record<PaymentType, PaymentTypeCode> = {
   None: 0,
   Arca: 1,
   MasterCard: 2,

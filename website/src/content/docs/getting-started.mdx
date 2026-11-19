@@ -31,13 +31,13 @@ Requests time out after 30 seconds; pass `timeoutMs` to change that.
 
 <Steps>
 
-1. **Register the payment.** [`initPayment`](/ameria-sdk-js/api/classes/client/#initpayment) returns a `url` to the bank's card page.
+1. **Register the payment.** [`initPayment`](/ameria-sdk-js/api/classes/ameriaclient/#initpayment) returns a `url` to the bank's card page.
 
    <Code code={createPayment} lang="ts" title="create-payment.ts" />
 
 2. **Redirect the payer** to that `url`. They enter their card details on the bank's page — card data never touches your server.
 
-3. **Verify on return.** The bank sends the payer back to your `backURL`. That redirect is not signed, so ask the bank for the result before fulfilling the order — see [Accept a payment](/ameria-sdk-js/guides/accept-a-payment/).
+3. **Verify on return.** The bank sends the payer back to your `backUrl`. That redirect is not signed, so ask the bank for the result before fulfilling the order — see [Accept a payment](/ameria-sdk-js/guides/accept-a-payment/).
 
 </Steps>
 
@@ -45,3 +45,8 @@ Requests time out after 30 seconds; pass `timeoutMs` to change that.
 
 - [Test environment](/ameria-sdk-js/testing/) — what the bank's sandbox accepts.
 - [Security](/ameria-sdk-js/security/) — what to check before going live.
+
+:::tip[Using an AI assistant?]
+Give it [`llms-full.txt`](https://hos.github.io/ameria-sdk-js/llms-full.txt): the whole
+documentation, API reference included, as one Markdown file.
+:::

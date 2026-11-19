@@ -36,7 +36,7 @@
     "prepack": "yarn build",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "typecheck": "yarn build && tsc --noEmit",
-    "lint": "eslint . && prettier --check . && publint",
+    "lint": "eslint . && prettier --check . && publint && attw --pack . --profile esm-only",
     "format": "prettier --write .",
     "test": "yarn build && node --test test/*.test.*",
     "docs:dev": "yarn workspace website dev",
@@ -46,6 +46,7 @@
     "website"
   ],
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@eslint/js": "^10.0.0",
     "@types/node": "^22.20.0",
     "eslint": "^10.0.0",

@@ -2,21 +2,21 @@ import { ameria } from "./client.js";
 
 // 1. First payment: pass cardHolderId so the bank saves the card.
 await ameria.initPayment({
-  orderID: 2350302,
+  orderId: 2350302,
   amount: 10,
   description: "Subscription, first month",
-  backURL: "https://shop.example/payment/back",
+  backUrl: "https://shop.example/payment/back",
   opaque: "",
   cardHolderId: "customer-77",
 });
 
 // 2. Later payments: charge the saved card, no payer interaction.
 const charge = await ameria.makeBindingPayment({
-  cardHolderID: "customer-77",
-  orderID: 2350303,
+  cardHolderId: "customer-77",
+  orderId: 2350303,
   amount: 10,
   description: "Subscription, second month",
-  backURL: "https://shop.example/payment/back",
+  backUrl: "https://shop.example/payment/back",
   opaque: "",
 });
 

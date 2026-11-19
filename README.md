@@ -3,16 +3,17 @@
 Unofficial TypeScript SDK for the [Ameriabank vPOS](https://ameriabank.am) payment API.
 Accept card payments, refunds, two-step payments and saved cards from Node.js.
 
-**Docs:** https://hos.github.io/ameria-sdk-js/
+**Docs:** https://hos.github.io/ameria-sdk-js/ · for AI tools:
+[llms.txt](https://hos.github.io/ameria-sdk-js/llms.txt)
 
 ```sh
 npm install @ameria/vpos-sdk
 ```
 
 ```ts
-import { Client } from "@ameria/vpos-sdk";
+import { AmeriaClient } from "@ameria/vpos-sdk";
 
-const ameria = new Client({
+const ameria = new AmeriaClient({
   clientId: process.env.AMERIA_CLIENT_ID!,
   username: process.env.AMERIA_USERNAME!,
   password: process.env.AMERIA_PASSWORD!,
@@ -21,24 +22,28 @@ const ameria = new Client({
 
 // Register the payment and send the payer to the bank's card page.
 const { url, PaymentID } = await ameria.initPayment({
-  orderID: 2350301,
+  orderId: 2350301,
   amount: 10,
   currency: "AMD",
   description: "Order #1042",
-  backURL: "https://shop.example/payment/back",
+  backUrl: "https://shop.example/payment/back",
   opaque: "order-1042",
 });
 
 // When they come back, ask the bank whether it really succeeded.
-const details = await ameria.getPaymentDetails(PaymentID);
-if (details.ResponseCode === "00") {
+const { paid } = await ameria.verifyPayment(PaymentID, {
+  amount: 10,
+  currency: "AMD",
+  orderId: 2350301,
+});
+if (paid) {
   // fulfil the order
 }
 ```
 
 > [!IMPORTANT]
-> The redirect to `backURL` is not signed. Always confirm the payment with
-> `getPaymentDetails` and check the amount before fulfilling an order.
+> The redirect to `backUrl` is not signed. Always confirm the payment with
+> `verifyPayment` before fulfilling an order.
 
 ## Requirements
 
