@@ -18,7 +18,9 @@ const { url, PaymentID } = await ameria.initPayment({
 });
 console.log("Redirect the payer to", url);
 
-// 2. When they come back, ask the bank whether it really succeeded.
+// 2. The payer comes back to backUrl, but that redirect is not signed: anyone can
+//    open it with a success code and skip paying. So ask the bank, and pass what
+//    you expect — otherwise a real payment for a cheaper order would also pass.
 const { paid, reason } = await ameria.verifyPayment(PaymentID, {
   amount: 10,
   currency: "AMD",

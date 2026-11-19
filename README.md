@@ -30,7 +30,9 @@ const { url, PaymentID } = await ameria.initPayment({
   opaque: "order-1042",
 });
 
-// When they come back, ask the bank whether it really succeeded.
+// The payer comes back to backUrl, but that redirect is not signed: anyone can
+// open it with a success code and skip paying. So ask the bank, and pass what
+// you expect — otherwise a real payment for a cheaper order would also pass.
 const { paid } = await ameria.verifyPayment(PaymentID, {
   amount: 10,
   currency: "AMD",
@@ -42,8 +44,9 @@ if (paid) {
 ```
 
 > [!IMPORTANT]
-> The redirect to `backUrl` is not signed. Always confirm the payment with
-> `verifyPayment` before fulfilling an order.
+> The redirect to `backUrl` is not signed, so its success code proves nothing. Always
+> confirm the payment with `verifyPayment` before fulfilling an order — see
+> [Security](https://hos.github.io/ameria-sdk-js/security/).
 
 ## Requirements
 
