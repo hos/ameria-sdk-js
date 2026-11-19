@@ -14,7 +14,10 @@
   ],
   "homepage": "https://hos.github.io/ameria-sdk-js/",
   "bugs": "https://github.com/hos/ameria-sdk-js/issues",
-  "repository": "github:hos/ameria-sdk-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hos/ameria-sdk-js.git"
+  },
   "license": "MIT",
   "author": "hos <hovosanoyan@gmail.com>",
   "type": "module",

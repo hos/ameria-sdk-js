@@ -1,7 +1,9 @@
 name: Release
 
-# Publishes to npm when a GitHub release is published. Uses npm trusted
+# Stages the package on npm when a GitHub release is published. Uses npm trusted
 # publishing (OIDC), so no npm token is stored anywhere; npm adds provenance.
+# The trusted publisher only allows staging: the version goes live once the
+# owner approves it with 2FA on npmjs.com or with `npm stage approve <id>`.
 on:
   release:
     types: [published]
@@ -26,4 +28,4 @@ jobs:
       - run: yarn lint && yarn typecheck && yarn test
       - name: Check the tag matches package.json
         run: test "v$(node -p 'require("./package.json").version')" = "${GITHUB_REF_NAME}"
-      - run: npm publish --access public
+      - run: npm stage publish . --access public
